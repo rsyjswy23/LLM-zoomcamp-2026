@@ -1,6 +1,6 @@
 .env
 __pycache__/
-*.db
+*.db*
 models/
 .venv/
 faq.db-shm
