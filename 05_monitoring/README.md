@@ -255,3 +255,101 @@ Through this project I learned how to:
 - Monitoring multiple LLM models simultaneously
 - Integration with Prometheus/OpenTelemetry
 
+# Module 5 Homework: OpenTelemetry Monitoring
+
+## Overview
+
+In this homework, I explored **OpenTelemetry (OTel)** as a standardized observability framework for monitoring a Retrieval-Augmented Generation (RAG) application. Instead of building custom monitoring with dataclasses and PostgreSQL, I instrumented the RAG pipeline using distributed tracing, captured LLM metrics as span attributes, persisted traces to SQLite, and analyzed performance bottlenecks using SQL.
+
+---
+
+# Architecture
+
+```text
+                 User Query
+                      │
+                      ▼
+              Traced RAG Pipeline
+                      │
+      ┌───────────────┼────────────────┐
+      │               │                │
+      ▼               ▼                ▼
+   rag span      search span      llm span
+                                      │
+                     ┌────────────────┼────────────────┐
+                     │                │                │
+                     ▼                ▼                ▼
+               Input Tokens    Output Tokens       Cost
+                      │
+                      ▼
+             OpenTelemetry SDK
+                      │
+                      ▼
+              Span Processor
+                      │
+                      ▼
+            SQLite Span Exporter
+                      │
+                      ▼
+                 traces.db
+```
+
+---
+
+# Technologies
+
+- OpenTelemetry (OTel)
+- Python
+- SQLite
+- OpenAI API
+- SQL
+
+---
+
+# What I Learned
+
+## 1. OpenTelemetry Fundamentals
+
+Learned the core OpenTelemetry concepts, including **traces**, **spans**, **span attributes**, and **exporters**. A trace represents an end-to-end user request, while spans capture individual operations such as document retrieval and LLM inference.
+
+---
+
+## 2. Instrumenting the RAG Pipeline
+
+Extended the existing RAG implementation by creating a `RAGTraced` subclass that automatically wraps major operations (`rag`, `search`, and `llm`) inside OpenTelemetry spans. This enabled end-to-end request tracing without modifying the original business logic.
+
+---
+
+## 3. Capturing LLM Metrics
+
+Recorded key LLM execution metrics as span attributes, including:
+
+- Input tokens
+- Output tokens
+- API cost
+- User query
+
+These attributes provide detailed visibility into model usage and operational costs.
+
+---
+
+## 4. Building a Custom SQLite Exporter
+
+Implemented a custom OpenTelemetry exporter that writes span information directly into a SQLite database. This demonstrates how OpenTelemetry traces can be persisted to any storage backend for later analysis.
+
+---
+
+## 5. Performance Analysis
+
+Queried the collected traces using SQL to identify system bottlenecks. Analysis showed that document retrieval consistently completed in **under 100 ms**, while LLM inference required approximately **2–3 seconds**, making it the dominant contributor to overall response latency.
+
+---
+
+# Key Takeaways
+
+- OpenTelemetry provides a standardized approach to application observability without requiring custom monitoring frameworks.
+- Distributed tracing makes it easy to identify performance bottlenecks across different stages of the RAG pipeline.
+- Span attributes can capture valuable operational metrics such as token usage, latency, cost, and request metadata.
+- Custom exporters allow traces to be stored in databases like SQLite or forwarded to enterprise monitoring platforms.
+- SQL can be used to analyze trace data and uncover latency trends, token usage patterns, and cost insights.
+- LLM inference remains the largest performance bottleneck, while retrieval operations contribute minimal latency.
