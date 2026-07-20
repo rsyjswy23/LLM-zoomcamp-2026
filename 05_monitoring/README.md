@@ -7,8 +7,6 @@ In this module, I built an end-to-end monitoring pipeline for a Retrieval-Augmen
 The project demonstrates how to monitor production LLM applications by tracking latency, token usage, cost, answer quality, and user feedback over time.
 
 ---
-# Demo
-![](2dashboard.mov)
 
 # Architecture
 
