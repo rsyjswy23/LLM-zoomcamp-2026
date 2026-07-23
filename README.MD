@@ -99,7 +99,7 @@ A production-oriented LLM-powered Q&A chatbot that answers student questions usi
 ---
 
 # Demo Video
-![](2dashboard.mov)
+![](./2dashboard.mov)
 
 # Features
 
