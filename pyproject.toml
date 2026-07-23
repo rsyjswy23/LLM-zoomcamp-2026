@@ -24,4 +24,5 @@ dependencies = [
 [tool.uv.workspace]
 members = [
     "02-vector-search",
+    "llm-zoomcamp-hw5",
 ]
